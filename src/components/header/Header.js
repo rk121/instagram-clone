@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import LoginIcon from "@mui/icons-material/Login";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function HomeIcon(props: SvgIconProps) {
   return (
@@ -21,7 +21,17 @@ function HomeIcon(props: SvgIconProps) {
   );
 }
 
-function Header({ handleOpen }) {
+function Header({ handleOpen, isUserloggedIn, logOutHandler }) {
+  const navigate = useNavigate();
+
+  const clickHandler = () => {
+    if (isUserloggedIn) {
+      return handleOpen();
+    } else {
+      navigate("/signin");
+    }
+  };
+
   return (
     <Grid
       container
@@ -60,8 +70,8 @@ function Header({ handleOpen }) {
               </Tooltip>
             </Link>
           </Grid>
-          <Grid item onClick={handleOpen}>
-            <Tooltip title="New Post">
+          <Grid item>
+            <Tooltip title="New Post" onClick={clickHandler}>
               <IconButton sx={{ color: "red" }}>
                 <AddAPhotoOutlinedIcon />
               </IconButton>
@@ -77,13 +87,23 @@ function Header({ handleOpen }) {
             </Link>
           </Grid>
           <Grid item>
-            <Link to="/signin">
-              <Tooltip title="Log in">
-                <IconButton sx={{ color: "red" }}>
-                  <LoginIcon />
-                </IconButton>
-              </Tooltip>
-            </Link>
+            {isUserloggedIn ? (
+              <Link to="/">
+                <Tooltip title="Log Out" onClick={logOutHandler}>
+                  <IconButton sx={{ color: "red" }}>
+                    <LoginIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+            ) : (
+              <Link to="/signin">
+                <Tooltip title="Log In">
+                  <IconButton sx={{ color: "red" }}>
+                    <LoginIcon />
+                  </IconButton>
+                </Tooltip>
+              </Link>
+            )}
           </Grid>
         </Grid>
       </Grid>

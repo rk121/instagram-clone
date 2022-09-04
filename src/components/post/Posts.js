@@ -1,37 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import NewPost from "./NewPost";
 import Post from "./Post";
 import SideBar from "./SideBar";
 import { Grid } from "@mui/material";
 
-function Posts({ currentUsers, newPostHandler, open, handleClose }) {
-  const [posts, setPosts] = useState([]);
-
-  const getPosts = () => {
-    currentUsers.forEach((user) => {
-      if (user.posts.length > 0) {
-        setPosts((prevPosts) => [...prevPosts, ...user.post]);
-      }
-    });
-  };
-
+function Posts({
+  users,
+  newPostHandler,
+  open,
+  handleClose,
+  loggedInUser,
+  dogPictureURLS,
+}) {
   return (
-    <Grid
-      container
-      direction="row"
-      justifyContent="space-around"
-      alignItems="center"
-    >
+    <Grid container direction="row" justifyContent="space-around">
       <Grid item sx={{ mx: "auto" }}>
         <NewPost
           newPostHandler={newPostHandler}
           open={open}
           handleClose={handleClose}
+          loggedInUser={loggedInUser}
         />
-        {}
+        {users.map((user) => (
+          <Post posts={user.posts} />
+        ))}
       </Grid>
-      <Grid item sx={{ mx: "auto" }}>
-        <SideBar />
+      <Grid item sx={{ mx: "auto", my: 4 }}>
+        <SideBar dogPictureURLS={dogPictureURLS} />
       </Grid>
     </Grid>
   );

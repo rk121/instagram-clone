@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import PhotoCameraBackIcon from "@mui/icons-material/PhotoCameraBack";
 import Grid from "@mui/material/Grid";
+import { Navigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -21,9 +22,8 @@ const style = {
   p: 4,
 };
 
-function NewPost({ newPostHandler, open, handleClose }) {
+function NewPost({ newPostHandler, open, handleClose, loggedInUser }) {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [username, setUsername] = useState(null);
   const [caption, setCaption] = useState(null);
 
   const filePickerRef = useRef(null);
@@ -39,10 +39,6 @@ function NewPost({ newPostHandler, open, handleClose }) {
     };
   };
 
-  const usernameChangeHandler = (e) => {
-    setUsername(e.target.value);
-  };
-
   const captionChangeHandler = (e) => {
     setCaption(e.target.value);
   };
@@ -50,11 +46,11 @@ function NewPost({ newPostHandler, open, handleClose }) {
   const clickHandler = () => {
     newPostHandler({
       id: Math.round(Math.random() * 999999999),
-      username: username,
+      name: loggedInUser.name,
       img: selectedFile,
       caption: caption,
     });
-    setUsername(null);
+
     setSelectedFile(null);
     setCaption(null);
     handleClose();
@@ -99,14 +95,6 @@ function NewPost({ newPostHandler, open, handleClose }) {
                 ref={filePickerRef}
                 hidden
                 onChange={addImageToPost}
-              />
-
-              <TextField
-                onChange={usernameChangeHandler}
-                required
-                label="Username"
-                type="text"
-                id="username"
               />
             </Grid>
             <Grid item>

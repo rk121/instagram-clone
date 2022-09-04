@@ -10,6 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Navigate, useNavigate } from "react-router";
 
 function Copyright(props) {
   return (
@@ -32,6 +33,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp(props) {
+  const navigate = useNavigate();
   const [currentNumberOfUsers, setCurrentNumberOfUsers] = useState(3);
 
   const handleSubmit = (event) => {
@@ -44,6 +46,7 @@ export default function SignUp(props) {
       name: data.get("firstName") + " " + data.get("lastName"),
     });
     setCurrentNumberOfUsers(currentNumberOfUsers + 1);
+    navigate("/signin");
   };
 
   return (

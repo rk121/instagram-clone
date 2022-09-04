@@ -9,17 +9,28 @@ import Profile from "./components/profile/Profile";
 
 function App() {
   const [currentUsers, setCurrentUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
+  const [isUserloggedIn, setIsUserLoggedIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [dogPictureURLS, setDogPictureURLS] = useState([]);
 
   useEffect(() => {
     fetchUsers();
-    setPosts();
+    fetchDogPicture();
   }, []);
 
   const fetchUsers = async () => {
     return await fetch("http://localhost:3000/users")
       .then((res) => res.json())
       .then((data) => setCurrentUsers(data));
+  };
+
+  const fetchDogPicture = async () => {
+    return await fetch("https://dog.ceo/api/breeds/image/random")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        return setDogPictureURLS(data.message);
+      });
   };
 
   const addNewUser = async (data) => {
@@ -35,11 +46,39 @@ function App() {
   };
 
   const userAuth = (data) => {
-    console.log(
-      currentUsers.filter(
-        (user) => user.email === data.email && user.password === data.password
-      )
+    const userIndex = currentUsers.findIndex(
+      (user) => user.email === data.email && user.password === data.password
     );
+    if (userIndex !== -1) {
+      setIsUserLoggedIn(true);
+      setLoggedInUser(currentUsers[userIndex]);
+    }
+  };
+
+  const logOutHandler = () => {
+    setIsUserLoggedIn(false);
+    setLoggedInUser(null);
+  };
+
+  const changeAccountDetailsHandler = (data) => {
+    console.log(data);
+    fetch(`http://localhost:3000/users/${data.id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+
+      // Fields that to be updated are passed
+      body: JSON.stringify(data),
+    })
+      .then(function (response) {
+        // console.log(response);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
   };
 
   const [open, setOpen] = useState(false);
@@ -49,23 +88,45 @@ function App() {
 
   const newPostHandler = (data) => {
     console.log(data);
-    // setPosts((prevPosts) => {
-    //   return [...prevPosts, data];
-    // });
+    fetch(`http://localhost:3000/users/${loggedInUser.id}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "PATCH",
+
+      // Fields that to be updated are passed
+      body: JSON.stringify({ posts: [data, ...loggedInUser.posts] }),
+    })
+      .then(function (response) {
+        // console.log(response);
+        return response.json();
+      })
+      .then(function (data) {
+        console.log(data);
+      });
+
+    fetchUsers();
   };
 
   return (
     <div className="App">
-      <Header handleOpen={handleOpen} />
+      <Header
+        handleOpen={handleOpen}
+        isUserloggedIn={isUserloggedIn}
+        logOutHandler={logOutHandler}
+      />
       <Routes>
         <Route
           path="/"
           element={
             <Posts
-              currentUsers={currentUsers}
+              users={currentUsers}
               newPostHandler={newPostHandler}
               open={open}
               handleClose={handleClose}
+              loggedInUser={loggedInUser}
+              dogPictureURLS={dogPictureURLS}
             />
           }
         />
@@ -74,7 +135,16 @@ function App() {
           path="/signup"
           element={<SignUp newUserHandler={addNewUser} />}
         />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              loggedInUser={loggedInUser}
+              isUserloggedIn={isUserloggedIn}
+              changeAccountDetailsHandler={changeAccountDetailsHandler}
+            />
+          }
+        />
       </Routes>
     </div>
   );
