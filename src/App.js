@@ -7,40 +7,51 @@ import SignIn from "./components/sign-in/SignIn";
 import SignUp from "./components/sign-up/SignUp";
 import Profile from "./components/profile/Profile";
 
-const data = [
-  {
-    id: 1,
-    username: "Roshan",
-    img: "./images/post1.jpg",
-    caption: "What a great view! Just fabolous",
-  },
-];
-
 function App() {
-  const [currentWeather, setCurrentWeather] = useState(null);
-  useEffect(() => {
-    fetchWeather();
-  });
+  const [currentUsers, setCurrentUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-  const fetchWeather = async () => {
-    await fetch(
-      `https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}`
-    )
+  useEffect(() => {
+    fetchUsers();
+    setPosts();
+  }, []);
+
+  const fetchUsers = async () => {
+    return await fetch("http://localhost:3000/users")
       .then((res) => res.json())
-      .then((data) => setCurrentWeather(data));
+      .then((data) => setCurrentUsers(data));
+  };
+
+  const addNewUser = async (data) => {
+    await fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => setCurrentUsers((prevUsers) => [...prevUsers, data]));
+  };
+
+  const userAuth = (data) => {
+    console.log(
+      currentUsers.filter(
+        (user) => user.email === data.email && user.password === data.password
+      )
+    );
   };
 
   const [open, setOpen] = useState(false);
-  const [posts, setPosts] = useState(data);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const newPostHandler = (data) => {
     console.log(data);
-    setPosts((prevPosts) => {
-      return [...prevPosts, data];
-    });
+    // setPosts((prevPosts) => {
+    //   return [...prevPosts, data];
+    // });
   };
 
   return (
@@ -51,15 +62,18 @@ function App() {
           path="/"
           element={
             <Posts
-              posts={posts}
+              currentUsers={currentUsers}
               newPostHandler={newPostHandler}
               open={open}
               handleClose={handleClose}
             />
           }
         />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn signInHandler={userAuth} />} />
+        <Route
+          path="/signup"
+          element={<SignUp newUserHandler={addNewUser} />}
+        />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>

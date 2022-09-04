@@ -15,11 +15,11 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    props.signInHandler({
       email: data.get("email"),
       password: data.get("password"),
     });

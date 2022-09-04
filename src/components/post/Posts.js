@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import NewPost from "./NewPost";
 import Post from "./Post";
 import SideBar from "./SideBar";
 import { Grid } from "@mui/material";
 
-function Posts({ posts, newPostHandler, open, handleClose }) {
+function Posts({ currentUsers, newPostHandler, open, handleClose }) {
+  const [posts, setPosts] = useState([]);
+
+  const getPosts = () => {
+    currentUsers.forEach((user) => {
+      if (user.posts.length > 0) {
+        setPosts((prevPosts) => [...prevPosts, ...user.post]);
+      }
+    });
+  };
+
   return (
     <Grid
       container
@@ -18,9 +28,7 @@ function Posts({ posts, newPostHandler, open, handleClose }) {
           open={open}
           handleClose={handleClose}
         />
-        {posts.map((post) => (
-          <Post post={post} />
-        ))}
+        {}
       </Grid>
       <Grid item sx={{ mx: "auto" }}>
         <SideBar />

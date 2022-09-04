@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -31,14 +31,19 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function SignUp(props) {
+  const [currentNumberOfUsers, setCurrentNumberOfUsers] = useState(3);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    props.newUserHandler({
+      id: Math.round(Math.random() * 999999999),
       email: data.get("email"),
       password: data.get("password"),
+      name: data.get("firstName") + " " + data.get("lastName"),
     });
+    setCurrentNumberOfUsers(currentNumberOfUsers + 1);
   };
 
   return (

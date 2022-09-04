@@ -49,7 +49,7 @@ function NewPost({ newPostHandler, open, handleClose }) {
 
   const clickHandler = () => {
     newPostHandler({
-      id: Math.round(Math.random * 100),
+      id: Math.round(Math.random() * 999999999),
       username: username,
       img: selectedFile,
       caption: caption,

@@ -2,18 +2,52 @@
   "users": [
     {
       "id": 1,
-      "userId": 101,
-      "name": "Alice"
+      "name": "Alice Cals",
+      "email": "alice.cals@gmail.com",
+      "password": "12345678",
+      "posts": [
+        {
+          "id": 1,
+          "name": "Alice Cals",
+          "img": "./images/post1.jpg",
+          "caption": "What a great view! Just fabulous"
+        }
+      ]
     },
     {
       "id": 2,
-      "userId": 102,
-      "name": "Bob"
+      "name": "Bob Seymour",
+      "email": "bob@123.com",
+      "password": "12345678",
+      "posts": []
     },
     {
       "id": 3,
-      "userId": 103,
-      "name": "Carol"
+      "name": "Roshan Khadka",
+      "email": "roshankhadka@gmail.com",
+      "password": "1211",
+      "posts": []
+    },
+    {
+      "id": 4,
+      "email": "test@gmail.com",
+      "password": "test1",
+      "name": "Roshan Khadka",
+      "posts": []
+    },
+    {
+      "id": 5,
+      "email": "test2@gmail.com",
+      "password": "test1",
+      "name": "test 2",
+      "posts": []
+    },
+    {
+      "id": 410232707,
+      "email": "test3@test.com",
+      "password": "test",
+      "name": "test 3",
+      "posts": []
     }
   ]
 }
