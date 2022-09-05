@@ -4,7 +4,6 @@ import PetsIcon from "@mui/icons-material/Pets";
 import AddAPhotoOutlinedIcon from "@mui/icons-material/AddAPhotoOutlined";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Grid";
-import { Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import Input from "@mui/material/Input";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -12,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import LoginIcon from "@mui/icons-material/Login";
 import { Link, useNavigate } from "react-router-dom";
+import CameraRollIcon from "@mui/icons-material/CameraRoll";
 
 function HomeIcon(props: SvgIconProps) {
   return (
@@ -34,6 +34,7 @@ function Header({ handleOpen, isUserloggedIn, logOutHandler }) {
 
   return (
     <Grid
+      className="navbar"
       container
       direction="row"
       justifyContent="space-around"
@@ -41,7 +42,13 @@ function Header({ handleOpen, isUserloggedIn, logOutHandler }) {
       sx={{ mb: 2, boxShadow: 3, py: 2 }}
     >
       <Grid item xs={2}>
-        <Avatar src="./images/logo.png" alt="" />
+        <Link to="/">
+          <Tooltip title="Memories">
+            <IconButton sx={{ color: "#ba000d" }}>
+              <CameraRollIcon />
+            </IconButton>
+          </Tooltip>
+        </Link>
       </Grid>
       <Grid item xs={4}>
         <Input
